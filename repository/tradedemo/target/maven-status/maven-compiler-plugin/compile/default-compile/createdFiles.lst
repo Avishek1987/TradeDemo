@@ -1,0 +1,4 @@
+com\example\tradedemo\repository\TradeRepository.class
+com\example\tradedemo\controller\TradeController.class
+com\example\tradedemo\entity\Trade.class
+com\example\tradedemo\TradedemoApplication.class
