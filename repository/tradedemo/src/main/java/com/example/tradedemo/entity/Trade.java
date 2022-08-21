@@ -45,14 +45,14 @@ public class Trade {
 		super();
 	}
 	
-	public Trade(String tradeId, String version, String counterPartyId, String bookId, LocalDate maturityDate,
+	public Trade(String tradeId, String version, String counterPartyId, String bookId, LocalDate matString,
 			LocalDate createdDate, String expired) {
 		super();
 		TradeId = tradeId;
 		Version = version;
 		CounterPartyId = counterPartyId;
 		BookId = bookId;
-		MaturityDate = maturityDate;
+		MaturityDate = matString;
 		CreatedDate = createdDate;
 		Expired = expired;
 	}

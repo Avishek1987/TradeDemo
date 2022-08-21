@@ -24,6 +24,8 @@ public class TradeServiecImpl implements TradeService {
 
 	public Trade saveTrade(String str) throws ParseException, CustomException {
 		// TODO Auto-generated method stub
+		Trade trade = new Trade();
+		try {
 
 		JSONObject jsonObject = new JSONObject();
 		JSONParser jsonParser = new JSONParser();
@@ -34,7 +36,7 @@ public class TradeServiecImpl implements TradeService {
 				e.printStackTrace();
 			}
 		}
-		Trade trade = new Trade();
+		
 		List<Trade> tradeList = tradeRepository.findAll();
 
 		if (!tradeList.isEmpty()) {
@@ -43,9 +45,11 @@ public class TradeServiecImpl implements TradeService {
 			for (Trade t1 : tradeList) {
 
 				if (trade.getTradeId().equals(t1.getTradeId())) {
+					
 					if (trade.getVersion().equals(t1.getVersion())
-							&& (trade.getMaturityDate().isBefore(t1.getCreatedDate()))) {
+							&& (!trade.getMaturityDate().isBefore(t1.getCreatedDate()))) {
 						System.out.println("Inside tradelist 1st loop");
+						System.out.println("Flag value:"+trade.getMaturityDate().isBefore(t1.getCreatedDate()));
 						Date d = new Date();
 
 						StringBuilder sb = new StringBuilder();
@@ -60,12 +64,13 @@ public class TradeServiecImpl implements TradeService {
 						Date maturitydate = sdf.parse(dateStr);
 						tr.setMaturityDate(maturitydate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 						tr.setVersion(jsonObject.get("Version").toString());
-						t1.setExpired(jsonObject.get("Expired").toString());
+						tr.setExpired(jsonObject.get("Expired").toString());
 
 						return tradeRepository.save(tr);
 					} else if (trade.getVersion().equals(t1.getVersion())
-							&& (!trade.getMaturityDate().isBefore(t1.getCreatedDate()))) {
+							&& (trade.getMaturityDate().isBefore(t1.getCreatedDate()))) {
 						System.out.println("Inside tradelist 2nd loop");
+						System.out.println("Flag value:"+trade.getMaturityDate().isBefore(t1.getCreatedDate()));
 						Date d = new Date();
 
 						StringBuilder sb = new StringBuilder();
@@ -80,11 +85,12 @@ public class TradeServiecImpl implements TradeService {
 						Date maturitydate = sdf.parse(dateStr);
 						tr.setMaturityDate(maturitydate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 						tr.setVersion(jsonObject.get("Version").toString());
-						t1.setExpired(jsonObject.get("Expired").toString());
+						tr.setExpired("Y");
+						return tradeRepository.save(tr);
 
 					}
 
-					else if (Integer.parseInt(trade.getVersion()) < Integer.parseInt(t1.getVersion()))
+					else if (Integer.parseInt(trade.getVersion())< Integer.parseInt(t1.getVersion()))
 
 					{
 						System.out.println("Inside tradelist 3rd loop");
@@ -93,9 +99,11 @@ public class TradeServiecImpl implements TradeService {
 								"Version id is lower from existing verion for trade id:" + trade.getVersion());
 
 					}
+					
+					
 
 				}
-
+				
 			}
 
 		}
@@ -122,6 +130,12 @@ public class TradeServiecImpl implements TradeService {
 
 			return tradeRepository.save(tr);
 
+		}
+		
+		}
+		
+		catch(Exception e) {
+			e.printStackTrace();
 		}
 		return trade;
 	}

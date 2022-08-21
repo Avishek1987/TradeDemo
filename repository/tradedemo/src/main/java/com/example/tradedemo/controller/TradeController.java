@@ -17,6 +17,8 @@ import javax.persistence.PersistenceContext;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +37,7 @@ public class TradeController {
 	TradeServiecImpl tradeServiecImpl;
 
 	@PostMapping("/savetrade")
-	public String save(@RequestBody String t) throws ParseException {
+	public ResponseEntity<Trade> saveTrade(@RequestBody String t) throws ParseException {
 
 		try {
 
@@ -45,11 +47,11 @@ public class TradeController {
 
 		catch (Exception e) {
 			e.printStackTrace();
-			return "false";
+			return new ResponseEntity<Trade>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 
-		return "true";
+		  return new ResponseEntity<Trade>(HttpStatus.OK);
 
 	}
 
